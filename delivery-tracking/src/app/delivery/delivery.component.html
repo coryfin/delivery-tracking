@@ -1,4 +1,7 @@
-<div class="card column">
-  <div class="title">{{ delivery.destination.description }}</div>
-  <div class="subtitle">{{ delivery.driver?.name }}</div>
-</div>
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>{{ initials }}</div>
+    <mat-card-title>{{ delivery.destination.description }}</mat-card-title>
+    <mat-card-subtitle>{{ delivery.driver?.name }}</mat-card-subtitle>
+  </mat-card-header>
+</mat-card>

@@ -1,0 +1,15 @@
+@import "~@angular/material/theming";
+
+.mat-card {
+  width: 300px;
+}
+
+$primary: mat-palette($mat-deep-purple);
+
+.mat-card-avatar {
+  color: mat-color($primary, default-contrast);
+  background-color: mat-color($primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -9,4 +9,8 @@ import { Delivery } from '../model/delivery';
 })
 export class DeliveryComponent {
   @Input() delivery!: Delivery;
+
+  get initials(): string {
+    return this.delivery.destination.description[0] ?? '';
+  }
 }
