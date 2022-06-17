@@ -4,7 +4,7 @@
     <mat-card-title>{{ delivery.destination.description }}</mat-card-title>
     <mat-card-subtitle>
       <ng-container *ngIf="hasDriver; else addDriver">
-        {{ delivery.driver?.name }}
+        Driver: {{ delivery.driver?.name }}
       </ng-container>
       <ng-template #addDriver>
         <button mat-button color="warn" [matMenuTriggerFor]="menu" class="btn-sm">Assign Driver</button>
