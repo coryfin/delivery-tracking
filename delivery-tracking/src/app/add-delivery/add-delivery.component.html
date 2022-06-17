@@ -13,12 +13,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <google-map
-      height="400px"
-      width="800px"
-      [zoom]="zoom"
-      (mapClick)="onMapClick($event)"
-    >
+    <google-map height="400px" width="800px" [zoom]="zoom" [center]="center" (mapClick)="onMapClick($event)">
       <map-marker *ngIf="marker" [position]="marker" [title]="description"></map-marker>
     </google-map>
   </div>

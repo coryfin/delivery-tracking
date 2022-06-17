@@ -28,7 +28,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   };
 
   zoom: number = DEFAULT_ZOOM;
-  center!: google.maps.LatLngLiteral;
+  center: google.maps.LatLngLiteral = { lat: 40.7662899, lng: -112.0484876 };
   position: google.maps.LatLngLiteral | undefined;
   destination!: google.maps.LatLngLiteral;
 

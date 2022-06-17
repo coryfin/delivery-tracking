@@ -15,7 +15,8 @@ export class AddDeliveryComponent implements OnInit {
 
   description: string = '';
   driver?: Driver;
-  zoom: number = 15;
+  zoom: number = 10;
+  center: google.maps.LatLngLiteral = { lat: 40.7662899, lng: -112.0484876 };
   marker: google.maps.LatLngLiteral | undefined;
 
   constructor(private deliveryService: DeliveryService, private matDialogRef: MatDialogRef<AddDeliveryComponent>) { }
