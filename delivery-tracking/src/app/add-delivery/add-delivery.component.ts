@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Driver } from '../model/driver';
+import { isMapMouseEvent } from '../model/google-map-helpers';
 import { DeliveryService } from '../service/delivery.service';
 
 @Component({
@@ -14,11 +15,26 @@ export class AddDeliveryComponent implements OnInit {
 
   description: string = '';
   driver?: Driver;
+  zoom: number = 15;
+  marker: google.maps.LatLngLiteral | undefined;
 
   constructor(private deliveryService: DeliveryService, private matDialogRef: MatDialogRef<AddDeliveryComponent>) { }
 
   ngOnInit(): void {
-    this.$drivers = this.deliveryService.getDrivers();
+    this.$drivers = this.deliveryService.getDrivers().pipe(take(1));
+  }
+
+  get canSubmit(): boolean {
+    return !!this.description && !!this.marker;
+  }
+
+  onMapClick(event: google.maps.MapMouseEvent | google.maps.IconMouseEvent) {
+    if (isMapMouseEvent(event) && event.latLng) {
+      this.marker = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+    }
   }
 
   submit(): void {
@@ -26,8 +42,8 @@ export class AddDeliveryComponent implements OnInit {
       destination: {
         description: this.description,
         coordinates: {
-          latitude: 0,
-          longitude: 0,
+          latitude: this.marker!.lat,
+          longitude: this.marker!.lng,
         },
       },
       driver: this.driver,

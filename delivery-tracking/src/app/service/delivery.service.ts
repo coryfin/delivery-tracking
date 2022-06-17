@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, ReplaySubject, take, tap } from 'rxjs';
+import { BehaviorSubject, map, mergeMap, Observable, of, take, tap } from 'rxjs';
+import { Coordinates } from '../model/coordinates';
 import { Delivery } from '../model/delivery';
 import { Driver } from '../model/driver';
 
@@ -16,39 +17,47 @@ export class DeliveryService {
       {
         id: '123',
         destination: {
-          description: 'Albertsons Grocery',
+          description: 'Walmart South Salt Lake',
           coordinates: {
-            latitude: 0,
-            longitude: 0,
+            latitude: 40.7404778,
+            longitude: -111.97124,
           },
         },
         driver: {
           id: '1',
-          name: 'Johnny Appleseed'
+          name: 'Johnny Appleseed',
+          location: {
+            latitude: 40.7,
+            longitude: -111.9,
+          },
         },
       },
       {
         id: '456',
         destination: {
-          description: 'Walmart',
+          description: 'Walmart Parleys',
           coordinates: {
-            latitude: 0,
-            longitude: 0,
+            latitude: 40.7200194,
+            longitude: -111.8132876,
           },
         },
       },
       {
         id: '789',
         destination: {
-          description: 'CVS',
+          description: 'Walmart Murray',
           coordinates: {
-            latitude: 0,
-            longitude: 0,
+            latitude: 40.6696785,
+            longitude: -111.8635658,
           },
         },
         driver: {
           id: '2',
-          name: 'Paul Bunyan'
+          name: 'Paul Bunyan',
+          location: {
+            latitude: 40.7,
+            longitude: -111.9,
+          },
         },
       },
     ]);
@@ -57,16 +66,33 @@ export class DeliveryService {
       {
         id: '1',
         name: 'Johnny Appleseed',
+        location: {
+          latitude: 40.7,
+          longitude: -111.9,
+        },
       },
       {
         id: '2',
         name: 'Paul Bunyan',
+        location: {
+          latitude: 40.7,
+          longitude: -111.9,
+        },
       },
     ]);
+
+    this.startSimulation();
   }
 
   getDeliveries(): Observable<Delivery[]> {
     return this.deliveries.asObservable();
+  }
+
+  getDriverLocation(driverId: string): Observable<Coordinates | undefined> {
+    return this.getDrivers().pipe(
+      map(drivers => drivers.find(d => d.id === driverId)),
+      map(driver => driver?.location),
+    );
   }
 
   addDelivery(delivery: Delivery): Observable<Delivery> {
@@ -87,5 +113,24 @@ export class DeliveryService {
 
   getDrivers(): Observable<Driver[]> {
     return this.drivers.asObservable();
+  }
+  
+  private startSimulation(): void {
+    setInterval(() => {
+      const drivers = this.drivers.getValue().map(driver => {
+        return driver && {
+          ...driver,
+          location: driver.location && this.move(driver.location, 0, 0.00001),
+        };
+      });
+      this.drivers.next(drivers);
+    }, 50);
+  }
+
+  private move(coordinates: Coordinates, lat: number, long: number): Coordinates {
+    return {
+      latitude: coordinates.latitude + lat,
+      longitude: coordinates.longitude + long,
+    };
   }
 }

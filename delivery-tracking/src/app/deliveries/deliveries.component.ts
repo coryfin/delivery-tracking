@@ -19,9 +19,6 @@ export class DeliveriesComponent {
 
   ngOnInit(): void {
     this.$deliveries = this.deliveryService.getDeliveries();
-    this.$deliveries?.subscribe(value => {
-      console.log(value);
-    });
   }
 
   addDelivery(): void {

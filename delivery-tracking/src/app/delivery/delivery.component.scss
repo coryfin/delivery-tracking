@@ -1,7 +1,7 @@
 @import "~@angular/material/theming";
 
 .mat-card {
-  width: 300px;
+  width: 500px;
 }
 
 $primary: mat-palette($mat-deep-purple);
@@ -12,4 +12,9 @@ $primary: mat-palette($mat-deep-purple);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mat-button.btn-sm {
+  margin-left: -8px;
+  padding: 0 8px;
 }

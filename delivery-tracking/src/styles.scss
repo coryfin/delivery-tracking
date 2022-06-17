@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
+body {
+  margin: 0;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -21,4 +25,10 @@
 
 .gap-lg {
   gap: 15px;
+}
+
+.mat-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button {
+  &.btn-sm {
+    line-height: 20px;
+  }
 }

@@ -1,4 +1,11 @@
-<div class="column gap-md">
-  <app-delivery *ngFor="let delivery of $deliveries | async" [delivery]="delivery"></app-delivery>
-  <button mat-raised-button color="primary" (click)="addDelivery()">New Service Order</button>
+<div class="container column">
+  <mat-toolbar>
+    <div class="header row gap-md">
+      <h1>Service Calls</h1>
+      <button mat-raised-button color="primary" (click)="addDelivery()">New Service Call</button>
+    </div>
+  </mat-toolbar>
+  <div class="content row gap-lg">
+    <app-delivery *ngFor="let delivery of $deliveries | async" [delivery]="delivery"></app-delivery>
+  </div>
 </div>

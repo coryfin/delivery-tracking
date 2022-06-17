@@ -1,19 +1,29 @@
 <h1 mat-dialog-title>New Service Call</h1>
 <div mat-dialog-content>
   <div class="column">
-    <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
-      <input matInput [(ngModel)]="description" cdkFocusInitial>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Driver</mat-label>
-      <mat-select [(value)]="driver">
-        <mat-option *ngFor="let driver of $drivers | async" [value]="driver">{{ driver.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="row gap-md">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="description" required cdkFocusInitial>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Driver</mat-label>
+        <mat-select [(value)]="driver">
+          <mat-option *ngFor="let driver of $drivers | async" [value]="driver">{{ driver.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <google-map
+      height="400px"
+      width="800px"
+      [zoom]="zoom"
+      (mapClick)="onMapClick($event)"
+    >
+      <map-marker *ngIf="marker" [position]="marker" [title]="description"></map-marker>
+    </google-map>
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button color="primary" (click)="submit()">Submit</button>
+  <button mat-button color="primary" [disabled]="!canSubmit" (click)="submit()">Submit</button>
   <button mat-button mat-dialog-close>Cancel</button>
 </div>

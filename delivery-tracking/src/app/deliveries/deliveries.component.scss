@@ -1,3 +1,14 @@
-div.column {
+.container {
   align-items: start;
+}
+
+.header {
+  width: 100%;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.content {
+  padding: 20px;
+  flex-wrap: wrap;
 }

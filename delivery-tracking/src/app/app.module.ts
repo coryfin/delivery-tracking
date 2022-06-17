@@ -13,6 +13,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,13 +28,16 @@ import { MatSelectModule } from '@angular/material/select';
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
     FormsModule,
+    GoogleMapsModule,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

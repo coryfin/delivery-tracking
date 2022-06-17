@@ -2,6 +2,33 @@
   <mat-card-header>
     <div mat-card-avatar>{{ initials }}</div>
     <mat-card-title>{{ delivery.destination.description }}</mat-card-title>
-    <mat-card-subtitle>{{ delivery.driver?.name }}</mat-card-subtitle>
+    <mat-card-subtitle>
+      <ng-container *ngIf="hasDriver; else addDriver">
+        {{ delivery.driver?.name }}
+      </ng-container>
+      <ng-template #addDriver>
+        <button mat-button color="warn" class="btn-sm">Assign Driver</button>
+      </ng-template>
+    </mat-card-subtitle>
   </mat-card-header>
+  <mat-card-content>
+    <google-map
+      height="200px"
+      width="500px"
+      [center]="center"
+      [zoom]="zoom"
+    >
+      <map-marker
+        *ngIf="position"
+        [position]="position"
+        [icon]="icon"
+        [title]="delivery.driver!.name"
+      ></map-marker>
+      <map-marker
+        *ngIf="destinationPosition"
+        [position]="destinationPosition"
+        [title]="delivery.destination.description"
+      ></map-marker>
+    </google-map>
+  </mat-card-content>
 </mat-card>
