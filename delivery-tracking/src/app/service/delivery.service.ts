@@ -3,6 +3,7 @@ import { BehaviorSubject, map, mergeMap, Observable, of, take, tap } from 'rxjs'
 import { Coordinates } from '../model/coordinates';
 import { Delivery } from '../model/delivery';
 import { Driver } from '../model/driver';
+import { calculateNextStep, move } from '../model/math';
 
 @Injectable({
   providedIn: 'root'
@@ -67,16 +68,24 @@ export class DeliveryService {
         id: '1',
         name: 'Johnny Appleseed',
         location: {
-          latitude: 40.7,
-          longitude: -111.9,
+          latitude: 40.7662899,
+          longitude: -112.0484876,
         },
       },
       {
         id: '2',
         name: 'Paul Bunyan',
         location: {
-          latitude: 40.7,
-          longitude: -111.9,
+          latitude: 40.7662899,
+          longitude: -112.0484876,
+        },
+      },
+      {
+        id: '3',
+        name: 'John Henry',
+        location: {
+          latitude: 40.7662899,
+          longitude: -112.0484876,
         },
       },
     ]);
@@ -118,19 +127,14 @@ export class DeliveryService {
   private startSimulation(): void {
     setInterval(() => {
       const drivers = this.drivers.getValue().map(driver => {
+        const delivery = this.deliveries.getValue().find(delivery => delivery.driver?.id === driver.id);
+        const nextStep = driver?.location && delivery && calculateNextStep(driver.location, delivery?.destination.coordinates);
         return driver && {
           ...driver,
-          location: driver.location && this.move(driver.location, 0, 0.00001),
+          location: driver.location && move(driver.location, nextStep?.latitude ?? 0, nextStep?.longitude ?? 0),
         };
       });
       this.drivers.next(drivers);
     }, 50);
-  }
-
-  private move(coordinates: Coordinates, lat: number, long: number): Coordinates {
-    return {
-      latitude: coordinates.latitude + lat,
-      longitude: coordinates.longitude + long,
-    };
   }
 }
