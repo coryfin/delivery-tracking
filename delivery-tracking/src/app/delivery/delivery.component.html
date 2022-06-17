@@ -7,28 +7,17 @@
         {{ delivery.driver?.name }}
       </ng-container>
       <ng-template #addDriver>
-        <button mat-button color="warn" class="btn-sm">Assign Driver</button>
+        <button mat-button color="warn" [matMenuTriggerFor]="menu" class="btn-sm">Assign Driver</button>
+        <mat-menu #menu>
+          <button *ngFor="let driver of $drivers | async" mat-menu-item (click)="assignDriver(driver)">{{ driver.name }}</button>
+        </mat-menu>
       </ng-template>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <google-map
-      height="200px"
-      width="500px"
-      [center]="center"
-      [zoom]="zoom"
-    >
-      <map-marker
-        *ngIf="position"
-        [position]="position"
-        [icon]="icon"
-        [title]="delivery.driver!.name"
-      ></map-marker>
-      <map-marker
-        *ngIf="destination"
-        [position]="destination"
-        [title]="delivery.destination.description"
-      ></map-marker>
+    <google-map height="200px" width="500px" [center]="center" [zoom]="zoom">
+      <map-marker *ngIf="position" [position]="position" [icon]="icon" [title]="delivery.driver!.name"></map-marker>
+      <map-marker *ngIf="destination" [position]="destination" [title]="delivery.destination.description"></map-marker>
     </google-map>
   </mat-card-content>
 </mat-card>

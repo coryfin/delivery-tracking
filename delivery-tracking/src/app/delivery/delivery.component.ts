@@ -1,10 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { from, map, mergeMap, Observable, of, Subscription, take } from 'rxjs';
+import { map, Observable, Subscription, take } from 'rxjs';
 import { Delivery } from '../model/delivery';
 import { DeliveryService } from '../service/delivery.service';
-import {Coordinates, toCoordinates, toPosition} from '../model/coordinates';
+import { toCoordinates, toPosition } from '../model/coordinates';
 import { midpoint } from '../model/math';
 import { GoogleMap } from '@angular/google-maps';
+import { Driver } from '../model/driver';
+
+const DEFAULT_ZOOM = 15;
 
 @Component({
   selector: 'app-delivery',
@@ -17,12 +20,14 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   @ViewChild(GoogleMap) googleMap!: GoogleMap;
 
+  $drivers?: Observable<Driver[]>;
+
   icon: google.maps.Icon = {
     url: 'https://cdn2.iconfinder.com/data/icons/e-commerce-317/32/shipping_truck_map_trucking-512.png',
     scaledSize: new google.maps.Size(50, 50),
   };
-  
-  zoom: number = 15;
+
+  zoom: number = DEFAULT_ZOOM;
   center!: google.maps.LatLngLiteral;
   position: google.maps.LatLngLiteral | undefined;
   destination!: google.maps.LatLngLiteral;
@@ -37,6 +42,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.initCenter();
     this.initDestination();
     this.initMarkerPosition();
+    this.$drivers = this.deliveryService.getDrivers().pipe(take(1));
   }
 
   ngOnDestroy(): void {
@@ -52,6 +58,10 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   get hasDriver(): boolean {
     return !!this.delivery.driver?.name;
+  }
+
+  assignDriver(driver: Driver): void {
+    this.deliveryService.assignDriver(this.delivery.id!, driver.id);
   }
 
   private initCenter(): void {
@@ -86,16 +96,15 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   }
 
   private centerOnRoute(): void {
-    const bounds = new google.maps.LatLngBounds();
-    bounds.extend(this.destination);
+    const bounds = new google.maps.LatLngBounds(this.destination);
     if (this.position) {
       bounds.extend(this.position);
       const centerCoordinates = midpoint(toCoordinates(this.destination), toCoordinates(this.position));
       this.center = toPosition(centerCoordinates);
     }
     this.googleMap.fitBounds(bounds, 40);
-    if (this.googleMap.getZoom() ?? 0 < 4) {
-      this.zoom = 4;
+    if (this.googleMap.getZoom() ?? 0 < DEFAULT_ZOOM) {
+      this.zoom = DEFAULT_ZOOM;
       this.cdr.markForCheck();
     }
   }

@@ -123,6 +123,23 @@ export class DeliveryService {
   getDrivers(): Observable<Driver[]> {
     return this.drivers.asObservable();
   }
+
+  assignDriver(deliveryId: string, driverId: string): void {
+    const driver = this.drivers.getValue().find(driver => driver.id === driverId);
+    let delivery = this.deliveries.getValue().find(delivery => delivery.id === deliveryId);
+
+    const updatedDeliveries = this.deliveries.getValue().map(d => {
+      if (d === delivery) {
+        return {
+          ...d,
+          driver,
+        };
+      } else {
+        return d;
+      }
+    });
+    this.deliveries.next(updatedDeliveries)
+  }
   
   private startSimulation(): void {
     setInterval(() => {

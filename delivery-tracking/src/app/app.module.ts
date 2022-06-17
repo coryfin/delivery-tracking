@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CommonModule } from '@angular/common';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     MatSelectModule,
     MatToolbarModule,
   ],
